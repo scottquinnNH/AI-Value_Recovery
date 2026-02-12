@@ -1,0 +1,3084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Adoption Reality Check & Value Recovery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --navy: #132e53;
+    --cyan: #039fb8;
+    --gray: #525252;
+    --white: #ffffff;
+    --accent: #dee22a;
+    --green: #28c840;
+    --amber: #ffbd2e;
+    --navy-90: rgba(19, 46, 83, 0.9);
+    --navy-light: #1a3d6d;
+    --cyan-dark: #028a9f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--white);
+    background: var(--navy);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(19, 46, 83, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(3, 159, 184, 0.2);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(19, 46, 83, 0.97);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-brand {
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-brand span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--white);
+    background: rgba(3, 159, 184, 0.2);
+  }
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    margin: 5px 0;
+    transition: 0.3s;
+  }
+
+  /* ── Sections ── */
+  section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 4rem;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Subtle reveal (less distracting) ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Hero ── */
+  #hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #0a1e3d 50%, var(--navy) 100%);
+    position: relative;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 80%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(3, 159, 184, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    min-height: 80vh;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    padding: 0.4rem 1rem;
+    background: rgba(222, 226, 42, 0.1);
+    border: 1px solid rgba(222, 226, 42, 0.2);
+    border-radius: 50px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 .highlight-green {
+    color: var(--green);
+    -webkit-text-fill-color: var(--green);
+  }
+
+  h1 .highlight-amber {
+    color: var(--amber);
+    -webkit-text-fill-color: var(--amber);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--cyan);
+    color: var(--white);
+    box-shadow: 0 4px 20px rgba(3, 159, 184, 0.4);
+  }
+
+  .btn-primary:hover {
+    background: var(--cyan-dark);
+    box-shadow: 0 6px 24px rgba(3, 159, 184, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--cyan);
+    background: rgba(3, 159, 184, 0.1);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    color: var(--navy);
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(222, 226, 42, 0.3);
+  }
+
+  .btn-accent:hover {
+    box-shadow: 0 6px 24px rgba(222, 226, 42, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .hero-visual {
+    position: relative;
+  }
+
+  .hero-graphic {
+    width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+  }
+
+  /* Dashboard mockup */
+  .dashboard-mock {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(3, 159, 184, 0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+
+  .dashboard-mock .mock-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mock-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .mock-dot:nth-child(1) { background: #ff5f57; }
+  .mock-dot:nth-child(2) { background: #ffbd2e; }
+  .mock-dot:nth-child(3) { background: #28c840; }
+
+  .mock-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    height: 120px;
+    margin-bottom: 1.5rem;
+  }
+
+  .mock-bar {
+    flex: 1;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .mock-bar.vanity { background: rgba(40, 200, 64, 0.35); }
+  .mock-bar.real { background: rgba(255, 189, 46, 0.45); }
+
+  .mock-labels {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mock-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  .mock-badge {
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+    background: rgba(255, 189, 46, 0.15);
+    color: var(--amber);
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.3rem 0.7rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 189, 46, 0.3);
+    letter-spacing: 0.08em;
+  }
+
+  .float-card {
+    position: absolute;
+    background: rgba(19, 46, 83, 0.9);
+    border: 1px solid rgba(3, 159, 184, 0.2);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .float-card.card-1 {
+    top: -1rem;
+    left: -2rem;
+    border-color: rgba(40, 200, 64, 0.35);
+    box-shadow: 0 0 20px rgba(40, 200, 64, 0.1);
+  }
+
+  .float-card.card-2 {
+    bottom: 2rem;
+    right: -1.5rem;
+    border-color: rgba(255, 189, 46, 0.35);
+    box-shadow: 0 0 20px rgba(255, 189, 46, 0.1);
+  }
+
+  .float-card.card-1 .fc-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--green);
+  }
+
+  .float-card.card-2 .fc-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--amber);
+  }
+
+  .float-card .fc-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .float-card .fc-label {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Shared typography ── */
+  .section-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-lead {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 640px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ── The Trap Section ── */
+  #trap {
+    background: linear-gradient(180deg, #1a3a64 0%, #152d50 100%);
+  }
+
+  .trap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .trap-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trap-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255,95,87,0.6), rgba(255,189,46,0.6));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .trap-card:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,95,87,0.25);
+  }
+
+  .trap-card:hover::before { opacity: 1; }
+
+  .trap-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,95,87,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .trap-icon img,
+  .trap-icon svg {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .trap-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .trap-card p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+
+  /* ── Comparison Table ── */
+  .comparison-wrapper {
+    margin-top: 3rem;
+    overflow-x: auto;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(3, 159, 184, 0.15);
+  }
+
+  .comparison-table th {
+    background: rgba(3, 159, 184, 0.1);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    border-bottom: 1px solid rgba(3, 159, 184, 0.15);
+  }
+
+  .comparison-table td {
+    padding: 1rem 1.5rem;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+
+  .comparison-table tr:last-child td { border-bottom: none; }
+  .comparison-table .vanity-col { color: rgba(255,95,87,0.8); font-weight: 500; }
+  .comparison-table .value-col { color: var(--accent); font-weight: 500; }
+
+  /* ── What to Measure ── */
+  #measure {
+    background: var(--cyan);
+    color: var(--navy);
+  }
+
+  #measure .section-eyebrow { color: var(--navy); opacity: 0.6; }
+  #measure h2 { color: var(--navy); }
+  #measure .section-lead { color: rgba(19, 46, 83, 0.7); }
+
+  .measure-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .measure-card {
+    background: rgba(19, 46, 83, 0.08);
+    border: 1px solid rgba(19, 46, 83, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: background 0.2s ease;
+  }
+
+  .measure-card:hover {
+    background: rgba(19, 46, 83, 0.12);
+  }
+
+  .measure-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .measure-card h3 .m-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--navy);
+    color: var(--cyan);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .m-icon img,
+  .m-icon svg {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .measure-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .measure-card li {
+    font-size: 0.85rem;
+    color: rgba(19, 46, 83, 0.75);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .measure-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    background: var(--navy);
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+
+  /* ── Section 1 Visuals: Split-Screen ── */
+  .split-screen-visual {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .split-side {
+    flex: 1;
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .split-side.surface { background: rgba(255,95,87,0.06); }
+  .split-side.deep { background: rgba(3,159,184,0.06); }
+
+  .split-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .split-side.surface .split-label { color: rgba(255,95,87,0.7); }
+  .split-side.deep .split-label { color: var(--cyan); }
+
+  .split-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .split-bar {
+    border-radius: 2px;
+  }
+
+  .split-bar.thin {
+    height: 4px;
+    width: 70%;
+    background: rgba(255,95,87,0.25);
+  }
+
+  .split-bar.thick {
+    height: 8px;
+    width: 90%;
+    background: var(--cyan);
+    opacity: 0.6;
+  }
+
+  .split-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* ── Section 1 Visuals: Broken Funnel ── */
+  .broken-funnel {
+    margin-top: 1rem;
+  }
+
+  .funnel-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .funnel-node {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .funnel-node.active {
+    background: rgba(3,159,184,0.12);
+    color: var(--cyan);
+    border: 1px solid rgba(3,159,184,0.2);
+  }
+
+  .funnel-node.faded {
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.25);
+    border: 1px dashed rgba(255,255,255,0.1);
+  }
+
+  .funnel-connector {
+    width: 20px;
+    height: 2px;
+    background: var(--cyan);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .funnel-connector.broken {
+    background: rgba(255,95,87,0.5);
+    border-top: 2px dashed rgba(255,95,87,0.5);
+    height: 0;
+  }
+
+  .funnel-break-label {
+    font-size: 0.62rem;
+    color: rgba(255,95,87,0.7);
+    font-weight: 600;
+    text-align: right;
+    margin-top: 0.4rem;
+    letter-spacing: 0.03em;
+    padding-right: 25%;
+  }
+
+  /* ── Section 1 Visuals: Iceberg ── */
+  .iceberg-visual {
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .iceberg-above {
+    padding: 0.5rem 0.6rem;
+    background: rgba(3,159,184,0.06);
+    text-align: center;
+  }
+
+  .iceberg-below {
+    padding: 0.5rem 0.6rem;
+    background: rgba(19,46,83,0.4);
+    text-align: center;
+  }
+
+  .iceberg-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.3rem;
+  }
+
+  .iceberg-above .iceberg-label { color: var(--cyan); }
+  .iceberg-below .iceberg-label { color: rgba(255,255,255,0.4); margin-bottom: 0; margin-top: 0.3rem; }
+
+  .iceberg-bar {
+    height: 6px;
+    border-radius: 3px;
+    margin: 0 auto;
+  }
+
+  .iceberg-bar.above-bar {
+    width: 85%;
+    background: var(--cyan);
+    opacity: 0.7;
+  }
+
+  .iceberg-bar.below-bar {
+    width: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .iceberg-waterline {
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(3,159,184,0.4) 30%, rgba(3,159,184,0.4) 70%, transparent 100%);
+  }
+
+  /* ── Section 1 Visuals: Credibility Scale ── */
+  .credibility-scale {
+    margin-top: 1.25rem;
+  }
+
+  .scale-track {
+    position: relative;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .scale-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 30%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(255,95,87,0.5), rgba(255,189,46,0.5));
+  }
+
+  .scale-marker {
+    position: absolute;
+    top: -8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scale-marker.low { left: 15%; }
+  .scale-marker.high { right: 5%; }
+
+  .scale-marker-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+  }
+
+  .scale-marker.low .scale-marker-dot { background: rgba(255,95,87,0.7); }
+  .scale-marker.high .scale-marker-dot { background: var(--accent); }
+
+  .scale-marker-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .scale-marker.low .scale-marker-label { color: rgba(255,95,87,0.7); }
+  .scale-marker.high .scale-marker-label { color: var(--accent); }
+
+  /* ── Section 1 Visuals: Leak Dashboard ── */
+  .leak-dashboard {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .leak-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .leak-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .leak-dot.critical { background: #ff5f57; box-shadow: 0 0 6px rgba(255,95,87,0.4); }
+  .leak-dot.warning { background: #ffbd2e; box-shadow: 0 0 6px rgba(255,189,46,0.4); }
+
+  .leak-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── Section 1 Visuals: Network Diagram ── */
+  .network-visual {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .network-side {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .network-side.disconnected { background: rgba(255,95,87,0.05); border: 1px solid rgba(255,95,87,0.1); }
+  .network-side.connected { background: rgba(3,159,184,0.05); border: 1px solid rgba(3,159,184,0.1); }
+
+  .net-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+  }
+
+  .network-side.disconnected .net-label { color: rgba(255,95,87,0.6); }
+  .network-side.connected .net-label { color: var(--cyan); }
+
+  .net-nodes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    max-width: 60px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .net-node {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .disconnected .net-node { background: rgba(255,95,87,0.3); }
+  .connected .net-node { background: var(--cyan); opacity: 0.6; }
+
+  .net-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .net-vs {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.25);
+    flex-shrink: 0;
+  }
+
+  /* ── Section 2 Visuals: Depth Meter ── */
+  .depth-meter {
+    margin-top: 1rem;
+  }
+
+  .depth-track {
+    height: 8px;
+    background: rgba(19,46,83,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .depth-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(19,46,83,0.3), var(--navy));
+  }
+
+  .depth-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.35rem;
+  }
+
+  .depth-label-left, .depth-label-right {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .depth-label-left { color: rgba(19,46,83,0.4); }
+  .depth-label-right { color: var(--navy); font-weight: 700; }
+
+  /* ── Section 2 Visuals: ROI Dashboard ── */
+  .roi-dashboard {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .roi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0.6rem;
+    background: rgba(19,46,83,0.06);
+    border-radius: 6px;
+  }
+
+  .roi-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(19,46,83,0.6);
+  }
+
+  .roi-value {
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .roi-value.down { color: var(--navy); }
+  .roi-value.up { color: #28c840; }
+
+  /* ── Section 2 Visuals: Control Tower ── */
+  .control-tower {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.6rem;
+    background: rgba(19,46,83,0.06);
+    border-radius: 6px;
+  }
+
+  .control-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .control-indicator.green { background: #28c840; box-shadow: 0 0 6px rgba(40,200,64,0.4); }
+  .control-indicator.amber { background: #ffbd2e; box-shadow: 0 0 6px rgba(255,189,46,0.4); }
+  .control-indicator.red { background: #ff5f57; box-shadow: 0 0 6px rgba(255,95,87,0.4); }
+
+  .control-text {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(19,46,83,0.6);
+  }
+
+  /* ── Section 2 Visuals: Retention Curve ── */
+  .retention-curve {
+    margin-top: 1rem;
+  }
+
+  .retention-svg {
+    width: 100%;
+    height: 60px;
+  }
+
+  .retention-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.35rem;
+  }
+
+  .ret-leg {
+    font-size: 0.62rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .ret-leg .ret-dot {
+    width: 8px;
+    height: 3px;
+    border-radius: 1px;
+  }
+
+  .ret-leg.sustainable { color: var(--navy); }
+  .ret-leg.sustainable .ret-dot { background: var(--navy); }
+  .ret-leg.declining { color: rgba(255,95,87,0.6); }
+  .ret-leg.declining .ret-dot { background: rgba(255,95,87,0.5); }
+
+  /* ═══════════════════════════════════════════
+     SECTION 3: THE COMPLETE SOLUTION
+     ═══════════════════════════════════════════ */
+  #solution {
+    background: linear-gradient(180deg, #162f52 0%, #132e53 100%);
+    align-items: flex-start;
+  }
+
+  #solution .section-inner {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+  }
+
+  .solution-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .solution-header .section-lead {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .solution-tagline {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-align: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .engagement-badge {
+    display: inline-block;
+    background: rgba(3, 159, 184, 0.12);
+    border: 1px solid rgba(3, 159, 184, 0.25);
+    color: var(--cyan);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Roadmap Overview Bar ── */
+  .roadmap-overview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 3rem;
+    padding: 1.5rem 2rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(3, 159, 184, 0.15);
+    border-radius: 16px;
+  }
+
+  .roadmap-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+  }
+
+  .roadmap-step:hover {
+    background: rgba(3, 159, 184, 0.1);
+  }
+
+  .roadmap-step.active {
+    background: rgba(3, 159, 184, 0.15);
+  }
+
+  .roadmap-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--cyan);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .roadmap-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .roadmap-weeks {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+
+  .roadmap-connector {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), rgba(3,159,184,0.3));
+    flex-shrink: 0;
+  }
+
+  /* Phase blocks */
+  .phase-block {
+    margin-bottom: 4rem;
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .phase-block:last-child { margin-bottom: 0; }
+
+  .phase-block::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: -2rem;
+    width: 2px;
+    background: rgba(3, 159, 184, 0.2);
+  }
+
+  .phase-block:last-child::before { bottom: 0; }
+
+  .phase-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cyan);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+    z-index: 1;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .phase-header-toggle {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .phase-header-toggle:hover h3 {
+    color: var(--cyan);
+  }
+
+  .toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+    color: var(--cyan);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .toggle-icon.collapsed {
+    transform: rotate(-90deg);
+  }
+
+  .phase-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .phase-tag {
+    display: inline-block;
+    background: rgba(3, 159, 184, 0.15);
+    color: var(--cyan);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .phase-objective {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .phase-objective strong {
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+  }
+
+  /* Collapsible phase content */
+  .phase-content {
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  .phase-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  /* Methodology cards inside phase */
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .method-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(3, 159, 184, 0.1);
+    border-radius: 14px;
+    padding: 1.75rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .method-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(3, 159, 184, 0.25);
+  }
+
+  .method-card h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 0.6rem;
+  }
+
+  .method-card p {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .method-card p:last-child { margin-bottom: 0; }
+
+  .method-visual-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(222, 226, 42, 0.8);
+    letter-spacing: 0.03em;
+    margin-top: 0.25rem;
+  }
+
+  .method-visual-label::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .method-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .method-card li {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .method-card li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .method-card li strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Funnel visual */
+  .funnel-visual {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 1rem 0 0.5rem;
+    overflow: hidden;
+  }
+
+  .funnel-stage {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--navy);
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%, 8px 50%);
+  }
+
+  .funnel-stage:first-child {
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+    border-radius: 4px 0 0 4px;
+  }
+
+  .funnel-stage:nth-child(1) { background: rgba(3, 159, 184, 0.3); color: var(--white); }
+  .funnel-stage:nth-child(2) { background: rgba(3, 159, 184, 0.45); color: var(--white); }
+  .funnel-stage:nth-child(3) { background: rgba(3, 159, 184, 0.6); color: var(--white); }
+  .funnel-stage:nth-child(4) { background: rgba(3, 159, 184, 0.8); color: var(--white); }
+  .funnel-stage:nth-child(5) { background: var(--cyan); color: var(--navy); font-weight: 800; border-radius: 0 4px 4px 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 8px 50%); }
+
+  /* Persona badges */
+  .persona-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .persona-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.3rem 0.65rem;
+    border-radius: 50px;
+    letter-spacing: 0.02em;
+  }
+
+  .persona-badge.dabblers { background: rgba(255,189,46,0.15); color: #ffbd2e; border: 1px solid rgba(255,189,46,0.25); }
+  .persona-badge.power { background: rgba(3,159,184,0.15); color: var(--cyan); border: 1px solid rgba(3,159,184,0.25); }
+  .persona-badge.shadow { background: rgba(255,95,87,0.15); color: #ff5f57; border: 1px solid rgba(255,95,87,0.25); }
+  .persona-badge.avoiders { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.12); }
+
+  /* Heatmap mini visual */
+  .heatmap-mini {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    margin-top: 0.75rem;
+    max-width: 180px;
+  }
+
+  .heatmap-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 3px;
+  }
+
+  /* Spot indicators */
+  .spot-indicators {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+
+  .spot {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .spot-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .spot-dot.cold { background: #4a90d9; }
+  .spot-dot.hot { background: #ff5f57; }
+  .spot-dot.blocked { background: #ffbd2e; }
+
+  .spot.cold { color: #7ab3e8; }
+  .spot.hot { color: #ff8a84; }
+  .spot.blocked { color: #ffcd5e; }
+
+  /* Scoring matrix mini */
+  .scoring-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .scoring-row:first-of-type { margin-top: 0.75rem; }
+
+  .score-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .score-bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--cyan);
+  }
+
+  /* Workflow diagram mini */
+  .workflow-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .wf-step {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(3, 159, 184, 0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(3, 159, 184, 0.15);
+    white-space: nowrap;
+  }
+
+  .wf-step.checkpoint {
+    background: rgba(222, 226, 42, 0.12);
+    color: var(--accent);
+    border-color: rgba(222, 226, 42, 0.2);
+  }
+
+  .wf-arrow {
+    color: rgba(255,255,255,0.2);
+    font-size: 0.7rem;
+    padding: 0 0.25rem;
+  }
+
+  /* Reinforcement cycle */
+  .cycle-visual {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .cycle-node {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.4rem 0.7rem;
+    border-radius: 50px;
+    background: rgba(3, 159, 184, 0.08);
+    border: 1px solid rgba(3, 159, 184, 0.15);
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Deliverables row */
+  .deliverables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .deliverables-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+
+  .deliverable-tag {
+    background: rgba(222, 226, 42, 0.1);
+    border: 1px solid rgba(222, 226, 42, 0.2);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50px;
+    letter-spacing: 0.02em;
+    position: relative;
+    cursor: default;
+  }
+
+  .deliverable-tag[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(19, 46, 83, 0.97);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.72rem;
+    font-weight: 400;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(3, 159, 184, 0.25);
+    max-width: 280px;
+    white-space: normal;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    line-height: 1.4;
+  }
+
+  /* ═══════════════════════════════════════════
+     SECTION 4: GET STARTED
+     ═══════════════════════════════════════════ */
+  #getstarted {
+    background: linear-gradient(180deg, var(--navy) 0%, #0a1930 100%);
+    align-items: flex-start;
+  }
+
+  #getstarted .section-inner {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+  }
+
+  .getstarted-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .getstarted-header .section-lead {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  /* Engagement options */
+  .engage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .engage-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(3, 159, 184, 0.12);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .engage-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(3, 159, 184, 0.3);
+  }
+
+  .engage-card.featured {
+    border-color: var(--cyan);
+    background: rgba(3, 159, 184, 0.06);
+  }
+
+  .engage-card.featured::before {
+    content: 'TYPICAL STARTING POINT';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background: var(--cyan);
+    color: var(--navy);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    padding: 0.3rem;
+  }
+
+  .engage-card.featured { padding-top: 2.75rem; }
+
+  .engage-option-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+  }
+
+  .engage-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .engage-duration {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  .engage-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+
+  .engage-card li {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.7);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .engage-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  .engage-visual-hint {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-style: italic;
+  }
+
+  /* What You Get */
+  .wyg-section {
+    margin-bottom: 4rem;
+  }
+
+  .wyg-section h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  .wyg-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .wyg-card {
+    text-align: center;
+    padding: 1.75rem 1.25rem;
+    background: rgba(3, 159, 184, 0.05);
+    border: 1px solid rgba(3, 159, 184, 0.1);
+    border-radius: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .wyg-card:hover {
+    background: rgba(3, 159, 184, 0.1);
+  }
+
+  .wyg-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--navy);
+    border: 1px solid rgba(3, 159, 184, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 1rem;
+  }
+
+  .wyg-icon img,
+  .wyg-icon svg {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .wyg-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+  }
+
+  .wyg-card p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+
+  /* Next Steps / Process */
+  .next-steps {
+    margin-bottom: 4rem;
+  }
+
+  .next-steps h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  .steps-flow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .step-item {
+    flex: 1;
+    text-align: center;
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    right: -10%;
+    width: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), rgba(3,159,184,0.2));
+  }
+
+  .step-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(3, 159, 184, 0.12);
+    border: 2px solid var(--cyan);
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin: 0 auto 1rem;
+  }
+
+  .step-item h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-item p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+
+  /* CTA closing */
+  .cta-closing {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: rgba(3, 159, 184, 0.06);
+    border: 1px solid rgba(3, 159, 184, 0.15);
+    border-radius: 20px;
+  }
+
+  .cta-closing .cta-tagline {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .cta-closing .cta-tagline span {
+    background: linear-gradient(135deg, var(--cyan), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-closing .cta-body {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 2rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ═══════════════════════════════════════════
+     MEASURE SECTION: IMPROVED CARD CONTRAST
+     ═══════════════════════════════════════════ */
+  #measure .measure-card {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  #measure .measure-card:hover {
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  #measure .measure-card h3 { color: var(--navy); }
+  #measure .measure-card li { color: rgba(19,46,83,0.75); }
+  #measure .measure-card li::before { background: var(--cyan); opacity: 0.6; }
+
+  /* ROI dashboard on white cards */
+  #measure .roi-row { background: rgba(19,46,83,0.06); }
+  #measure .roi-label { color: rgba(19,46,83,0.6); }
+  #measure .roi-value.down { color: var(--navy); }
+  #measure .roi-value.up { color: #1a9e32; }
+
+  /* Depth meter on white cards */
+  #measure .depth-track { background: rgba(19,46,83,0.1); }
+  #measure .depth-fill { background: linear-gradient(90deg, rgba(19,46,83,0.2), var(--navy)); }
+  #measure .depth-label-left { color: rgba(19,46,83,0.4); }
+  #measure .depth-label-right { color: var(--navy); }
+
+  /* Control tower on white cards */
+  #measure .control-row { background: rgba(19,46,83,0.05); }
+  #measure .control-text { color: rgba(19,46,83,0.7); }
+
+  /* Retention curve on white cards */
+  #measure .ret-leg.sustainable { color: var(--navy); }
+  #measure .ret-leg.sustainable .ret-dot { background: var(--navy); }
+  #measure .ret-leg.declining { color: rgba(255,95,87,0.7); }
+  #measure .ret-leg.declining .ret-dot { background: rgba(255,95,87,0.6); }
+
+  /* ═══════════════════════════════════════════
+     SOLUTION SECTION: LIGHTER GRAY
+     ═══════════════════════════════════════════ */
+  #solution {
+    background: linear-gradient(180deg, #788490 0%, #6b7680 100%) !important;
+  }
+
+  #solution .method-card {
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  #solution .method-card:hover {
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(3, 159, 184, 0.35);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+  #solution .method-card h4 {
+    color: var(--cyan);
+  }
+  #solution .method-card p,
+  #solution .method-card li {
+    color: var(--navy);
+    opacity: 0.85;
+  }
+  #solution .method-card li::before {
+    color: var(--cyan);
+  }
+  #solution .method-card li strong {
+    color: var(--cyan);
+  }
+  #solution .roadmap-overview {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(3, 159, 184, 0.25);
+  }
+  #solution .phase-block::before {
+    background: rgba(3, 159, 184, 0.35);
+  }
+  #solution .deliverable-tag {
+    background: rgba(222, 226, 42, 0.15);
+    border: 1px solid rgba(222, 226, 42, 0.3);
+  }
+  #solution .method-visual-label {
+    color: rgba(3, 159, 184, 0.9);
+  }
+  #solution .method-visual-label::before {
+    background: var(--cyan);
+    opacity: 0.5;
+  }
+  #solution .method-card .funnel-step {
+    color: var(--white);
+  }
+
+  /* Teal → Navy overrides for gray background readability */
+  #solution .phase-number {
+    background: var(--navy);
+    color: var(--white);
+  }
+  #solution .phase-tag {
+    background: rgba(19, 46, 83, 0.15);
+    color: var(--navy);
+  }
+  #solution .phase-header-toggle:hover h3 {
+    color: var(--navy);
+  }
+  #solution .toggle-icon {
+    color: var(--navy);
+  }
+  #solution .phase-block::before {
+    background: rgba(19, 46, 83, 0.3);
+  }
+  #solution .roadmap-overview {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(19, 46, 83, 0.2);
+  }
+  #solution .roadmap-num {
+    background: var(--navy);
+    color: var(--white);
+  }
+  #solution .roadmap-connector {
+    background: linear-gradient(90deg, var(--navy), rgba(19,46,83,0.3));
+  }
+  #solution .roadmap-step:hover {
+    background: rgba(19, 46, 83, 0.1);
+  }
+  #solution .roadmap-step.active {
+    background: rgba(19, 46, 83, 0.15);
+  }
+  #solution .method-card h4 {
+    color: var(--navy);
+  }
+  #solution .method-card li::before {
+    color: var(--navy);
+  }
+  #solution .method-card li strong {
+    color: var(--navy);
+  }
+  #solution .method-visual-label {
+    color: var(--navy);
+  }
+  #solution .method-visual-label::before {
+    background: var(--navy);
+  }
+  #solution .method-card:hover {
+    border-color: rgba(19, 46, 83, 0.35);
+  }
+  #solution .section-eyebrow {
+    color: var(--navy);
+  }
+  #solution .section-eyebrow::before {
+    background: var(--navy);
+  }
+  #solution .deliverable-tag {
+    background: rgba(19, 46, 83, 0.1);
+    border: 1px solid rgba(19, 46, 83, 0.25);
+    color: var(--navy);
+  }
+  #solution .engagement-badge {
+    background: rgba(19, 46, 83, 0.12);
+    border: 1px solid rgba(19, 46, 83, 0.3);
+    color: var(--navy);
+  }
+  #solution .deliverables-label {
+    color: rgba(19, 46, 83, 0.5);
+  }
+
+  /* Method card inner visuals on white backgrounds */
+  #solution .cycle-node {
+    background: rgba(19, 46, 83, 0.08);
+    border: 1px solid rgba(19, 46, 83, 0.18);
+    color: var(--navy);
+  }
+  #solution .persona-badge.dabblers {
+    background: rgba(255, 189, 46, 0.12);
+    color: #b8860b;
+    border-color: rgba(255, 189, 46, 0.3);
+  }
+  #solution .persona-badge.power {
+    background: rgba(3, 159, 184, 0.1);
+    color: #04798a;
+    border-color: rgba(3, 159, 184, 0.3);
+  }
+  #solution .persona-badge.shadow {
+    background: rgba(255, 95, 87, 0.1);
+    color: #c0392b;
+    border-color: rgba(255, 95, 87, 0.3);
+  }
+  #solution .persona-badge.avoiders {
+    background: rgba(19, 46, 83, 0.06);
+    color: var(--navy);
+    border: 1px solid rgba(19, 46, 83, 0.15);
+  }
+  #solution .heatmap-cell {
+    opacity: 0.9;
+  }
+  #solution .phase-objective {
+    color: rgba(255,255,255,0.75);
+  }
+  #solution .phase-header h3 {
+    color: var(--white);
+  }
+  #solution .score-label {
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  /* ═══════════════════════════════════════════
+     HERO: INTENTIONAL GREEN/AMBER CONNECTOR
+     ═══════════════════════════════════════════ */
+  .hero-gap-line {
+    position: absolute;
+    top: -2rem;
+    left: -3rem;
+    width: calc(100% + 4.5rem);
+    height: calc(100% + 6rem);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .hero-gap-label {
+    position: absolute;
+    top: 65%;
+    left: 42%;
+    transform: translate(-50%, -50%);
+    background: rgba(19, 46, 83, 0.95);
+    border: 1px solid rgba(255, 189, 46, 0.4);
+    box-shadow: 0 0 16px rgba(255, 189, 46, 0.15);
+    color: var(--amber);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    z-index: 11;
+    white-space: nowrap;
+  }
+
+  .float-card.card-1 {
+    border-color: rgba(40, 200, 64, 0.5) !important;
+    box-shadow: 0 0 24px rgba(40, 200, 64, 0.15), inset 0 0 0 1px rgba(40, 200, 64, 0.1) !important;
+  }
+
+  .float-card.card-1::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 14px;
+    border: 2px solid rgba(40, 200, 64, 0.15);
+    pointer-events: none;
+  }
+
+  .float-card.card-2 {
+    border-color: rgba(255, 189, 46, 0.5) !important;
+    box-shadow: 0 0 24px rgba(255, 189, 46, 0.15), inset 0 0 0 1px rgba(255, 189, 46, 0.1) !important;
+  }
+
+  .float-card.card-2::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 189, 46, 0.15);
+    pointer-events: none;
+  }
+
+  .float-card.card-2 .fc-num {
+    font-size: 1.8rem !important;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .hero-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .hero-visual { display: none; }
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+
+    nav.open .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--navy-90);
+      backdrop-filter: blur(20px);
+      padding: 1rem;
+      border-bottom: 1px solid rgba(3, 159, 184, 0.2);
+    }
+
+    .engage-grid { grid-template-columns: 1fr; }
+    .wyg-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-flow { flex-direction: column; gap: 2rem; align-items: center; }
+    .step-item:not(:last-child)::after { display: none; }
+    .method-grid { grid-template-columns: 1fr; }
+
+    .roadmap-overview {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+    }
+
+    .roadmap-connector {
+      width: 2px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .section-inner { padding: 5rem 1.25rem 3rem; }
+    .trap-grid { grid-template-columns: 1fr; }
+    .measure-columns { grid-template-columns: 1fr; }
+    .wyg-grid { grid-template-columns: 1fr; }
+    .phase-block { padding-left: 2.5rem; }
+
+    .roadmap-step {
+      padding: 0.5rem 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">Value<span>Recovery</span></a>
+    <ul class="nav-links">
+      <li><a href="#trap">The Uncomfortable Truth</a></li>
+      <li><a href="#measure">What You Actually Need</a></li>
+      <li><a href="#solution">Our Approach</a></li>
+      <li><a href="#getstarted">Get Started</a></li>
+    </ul>
+    <button class="hamburger" id="menuBtn" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════ SECTION 1: HERO ═══════════ -->
+<section id="hero">
+  <div class="section-inner">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">AI Value Recovery</div>
+        <h1>Your dashboards say <span class="highlight-green">green.</span><br>The business feels <span class="highlight-amber">amber.</span></h1>
+        <p class="hero-sub">AI spend is climbing but revenue lift, cost reduction, and efficiency gains aren&rsquo;t materializing. We recover the value your AI investment was supposed to deliver.</p>
+        <div class="hero-cta">
+          <a href="#solution" class="btn btn-primary">See our Approach &darr;</a>
+          <a href="#trap" class="btn btn-ghost">Explore the Problem</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-graphic">
+          <div class="dashboard-mock">
+            <div class="mock-badge">SURFACE METRICS ONLY</div>
+            <div class="mock-header">
+              <div class="mock-dot"></div>
+              <div class="mock-dot"></div>
+              <div class="mock-dot"></div>
+            </div>
+            <div class="mock-bars">
+              <div class="mock-bar vanity" style="height:85%"></div>
+              <div class="mock-bar vanity" style="height:92%"></div>
+              <div class="mock-bar real" style="height:30%"></div>
+              <div class="mock-bar vanity" style="height:78%"></div>
+              <div class="mock-bar real" style="height:25%"></div>
+              <div class="mock-bar vanity" style="height:95%"></div>
+            </div>
+            <div class="mock-labels">
+              <span class="mock-label" style="color:rgba(40,200,64,0.5)">Logins</span>
+              <span class="mock-label" style="color:rgba(40,200,64,0.5)">Training</span>
+              <span class="mock-label" style="color:rgba(255,189,46,0.5)">Impact</span>
+              <span class="mock-label" style="color:rgba(40,200,64,0.5)">Prompts</span>
+              <span class="mock-label" style="color:rgba(255,189,46,0.5)">Value</span>
+              <span class="mock-label" style="color:rgba(40,200,64,0.5)">Users</span>
+            </div>
+          </div>
+          <div class="float-card card-1">
+            <div class="fc-num">99%</div>
+            <div class="fc-label">Training Complete</div>
+          </div>
+          <svg class="hero-gap-line" viewBox="0 0 400 400">
+            <defs>
+              <linearGradient id="gapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#28c840;stop-opacity:0.8"/>
+                <stop offset="100%" style="stop-color:#ffbd2e;stop-opacity:0.8"/>
+              </linearGradient>
+            </defs>
+            <line x1="130" y1="52" x2="250" y2="295" stroke="url(#gapGrad)" stroke-width="3" stroke-dasharray="10,6" fill="none"/>
+          </svg>
+          <div class="hero-gap-label">THE GAP</div>
+          <div class="float-card card-2">
+            <div class="fc-num">???</div>
+            <div class="fc-label">Revenue Impact Unknown</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 1: THE VANITY METRICS TRAP ═══════════ -->
+<section id="trap">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">THE UNCOMFORTABLE TRUTH</div>
+    <h2 class="reveal">The metrics you trust are <span style="color:var(--green)">masking</span><br>real <span style="color:var(--amber)">problems.</span></h2>
+    <p class="section-lead reveal">Current AI metrics create a false sense of progress without proving <strong style="color:var(--white)">value, behavior change, or credibility</strong>.</p>
+
+    <div class="trap-grid">
+      <!-- Inputs Without Outcomes -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 237.85 294.19" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="a-cp"><path d="M63.31 189.5 101.18 151.64 224.32 150.14 224.32 188 63.31 189.5Z" fill="none"/></clipPath><clipPath id="a-cp1"><path d="M195.35 251.69 237.85 294.19 237.85 214 0 214 0 294.19 194.81 294.19 195.35 251.69Z" fill="none"/></clipPath></defs><rect x="117.81" y="109" width="20" height="20" fill="#039FB8"/><path d="M180.81 237 237.81 294 237.81 250 224.81 237Z" fill="#039FB8"/><path d="M86.81 70 86.81 0 156.81 0Z" fill="#039FB8"/><g clip-path="url(#a-cp)"><line x1="69.81" y1="168.12" x2="214.91" y2="168.12" stroke="#039FB8" stroke-width="10" fill="none"/></g><path d="M150.71 54.77C191.37 54.77 224.33 87.73 224.33 128.39 224.33 169.05 191.37 202.01 150.71 202.01L69.82 202.01" stroke="#FFF" stroke-width="10" fill="none"/><rect x="101.81" y="15" width="50" height="90" stroke="#FFF" stroke-width="10" fill="none"/><line x1="166.81" y1="105" x2="86.81" y2="105" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#a-cp1)"><path d="M29.81 279 29.81 242C37.62 234.19 42 229.81 49.81 222L202.81 222C210.62 229.81 215 234.19 222.81 242L222.81 287" stroke="#FFF" stroke-width="10" fill="none"/></g></svg></div>
+        <h3>Inputs Without Outcomes</h3>
+        <p>Prompts and costs tracked, rarely tied to cycle-time or revenue capture.</p>
+        <div class="broken-funnel">
+          <div class="funnel-row">
+            <span class="funnel-node active">Activity</span>
+            <span class="funnel-connector"></span>
+            <span class="funnel-node active">Usage</span>
+            <span class="funnel-connector broken"></span>
+            <span class="funnel-node faded">Results</span>
+          </div>
+          <div class="funnel-break-label">&uarr; Metrics stop here</div>
+        </div>
+      </div>
+
+      <!-- Breadth Without Depth -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 340 323" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="b-cp"><path d="M37 275.41 0 313.25 0 219 134 219 134 311.25 98.1 275.35Z" fill="none"/></clipPath><clipPath id="b-cp1"><path d="M340 313.25 303 275.41 303 313.25 206 313.25 206 219 340 219Z" fill="none"/></clipPath><clipPath id="b-cp2"><path d="M135 312.25 103 279.52 103 166.68 234 166.68 234 312.25Z" fill="none"/></clipPath><clipPath id="b-cp3"><path d="M42 147.66 78.36 111 78.36 88 42 88Z" fill="none"/></clipPath><clipPath id="b-cp4"><path d="M298 148.18 267 116.48 267 101 298 101Z" fill="none"/></clipPath></defs><path d="M60 249 134 323 134 265.44 118.73 249Z" fill="#039FB8"/><path d="M280 249 206 323 206 264.44 221.27 249Z" fill="#039FB8"/><path d="M205.34 31.05C221.61 36.45 236.22 45.49 248.21 57.19" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M105 46.14C118.18 36.73 133.48 30.11 150.05 27.13" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M165 203 154.96 264.51 170 280 185 264.51 175 203Z" fill="#039FB8"/><g clip-path="url(#b-cp)"><path d="M17.15 302 17.15 257 40.15 234 97 234 119 257 119 301" stroke="#FFF" stroke-width="10" fill="none"/></g><circle cx="68.15" cy="181.96" r="30" stroke="#FFF" stroke-width="10" fill="none"/><path d="M80 47C66.19 47 55 58.19 55 72 55 85.81 66.19 97 80 97 93.81 97 105 85.81 105 72 105 58.19 93.81 47 80 47Z" fill="#FFF"/><path d="M170 0C156.19 0 145 11.19 145 25 145 38.81 156.19 50 170 50 183.81 50 195 38.81 195 25 195 11.19 183.81 0 170 0Z" fill="#FFF"/><path d="M262 48C248.19 48 237 59.19 237 73 237 86.81 248.19 98 262 98 275.81 98 287 86.81 287 73 287 59.19 275.81 48 262 48Z" fill="#FFF"/><circle cx="170" cy="131.96" r="30" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="272.15" cy="181.96" r="30" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#b-cp1)"><path d="M322.85 302 322.85 257 299.85 234 243 234 221 257 221 301" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#b-cp2)"><path d="M119 301 119 207 143 184 198 184 221 207 221 302" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#b-cp3)"><path d="M58 137.36C58 120.25 61.84 104.03 68.7 89.52" stroke="#039FB8" stroke-width="10" fill="none"/></g><g clip-path="url(#b-cp4)"><path d="M276.81 103.55C280.18 114.22 282 125.58 282 137.36" stroke="#039FB8" stroke-width="10" fill="none"/></g><line x1="170" y1="199" x2="170" y2="210" stroke="#FFF" stroke-width="10" fill="none"/></svg></div>
+        <h3>Breadth Without Depth</h3>
+        <p>Monthly unique users show exposure, not habit change.</p>
+        <div class="split-screen-visual">
+          <div class="split-side surface">
+            <div class="split-label">Surface Activity</div>
+            <div class="split-bars">
+              <div class="split-bar thin"></div>
+              <div class="split-bar thin"></div>
+              <div class="split-bar thin"></div>
+              <div class="split-bar thin"></div>
+              <div class="split-bar thin"></div>
+              <div class="split-bar thin"></div>
+            </div>
+          </div>
+          <div class="split-divider"></div>
+          <div class="split-side deep">
+            <div class="split-label">Deep Integration</div>
+            <div class="split-bars">
+              <div class="split-bar thick"></div>
+              <div class="split-bar thick"></div>
+              <div class="split-bar thick"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Training ≠ Proficiency -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 292.69 256.54" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><path d="M292.69 89.63 229.6 119.54 229.6 59.54Z" fill="#039FB8"/><path d="M145.6 71.04 22.6 69.54 22.6 133.54" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M12.6 166.54 32.6 166.54 32.6 138.54C28.69 134.63 26.51 132.45 22.6 128.54 18.69 132.45 16.51 134.63 12.6 138.54Z" fill="#039FB8"/><line x1="262.6" y1="211.64" x2="151.6" y2="211.64" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="262.6" y1="232.54" x2="200.6" y2="232.54" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="27.6" y1="128.54" x2="17.6" y2="128.54" stroke="#FFF" stroke-width="10" fill="none"/><path d="M145.6 133.54 280.6 69.54 145.6 5.54 11.6 69.54Z" stroke="#FFF" stroke-width="10" fill="none"/><path d="M57.6 92.54 57.6 141.54 77.6 161.54 214.6 161.54 234.6 141.54 234.6 92.54" stroke="#FFF" stroke-width="10" fill="none"/><path d="M279.1 251.54 22.14 251.54C18.22 247.5 16.02 245.24 12.1 241.2L12.1 201.89C16.02 197.85 18.22 195.59 22.14 191.55L279.1 191.55" stroke="#FFF" stroke-width="10" fill="none"/></svg></div>
+        <h3>Training &ne; Proficiency</h3>
+        <p>Completion rates don&rsquo;t prove on-the-job compliance or effectiveness.</p>
+        <div class="iceberg-visual">
+          <div class="iceberg-above">
+            <div class="iceberg-label">Training Completion</div>
+            <div class="iceberg-bar above-bar"></div>
+          </div>
+          <div class="iceberg-waterline"></div>
+          <div class="iceberg-below">
+            <div class="iceberg-bar below-bar"></div>
+            <div class="iceberg-label">Actual Proficiency &amp; Compliance</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Self-Attested Wins -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 263 233.11" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><path d="M226 134.11 226 204.11 262.08 168.46Z" fill="#039FB8"/><path d="M206 0 206 50 180.59 24.89Z" fill="#039FB8"/><path d="M216 0 216 50 241.41 24.89Z" fill="#039FB8"/><line x1="114" y1="124.11" x2="74" y2="124.11" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="114" y1="145.11" x2="25" y2="145.11" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="50" y1="165.11" x2="25" y2="165.11" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="50" y1="185.11" x2="25" y2="185.11" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="114" y1="104.11" x2="74" y2="104.11" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M47 64.11 25 64.11C17.19 71.92 12.81 76.3 5 84.11L5 228.11 135 228.11 135 64.11 93 64.11" stroke="#FFF" stroke-width="10" fill="none"/><path d="M234.56 25.11 258 25.11 258 99.11C248.67 108.44 243.33 113.78 234 123.11L188 123.11 164 99.11 164 25.11 186.54 25.11" stroke="#FFF" stroke-width="10" fill="none"/><path d="M211 123.11 211 188.11C211 199.16 202.05 208.11 191 208.11L158.63 208.11 134.5 185.11 107 185.11" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="87" cy="185.11" r="20" stroke="#FFF" stroke-width="10" fill="none"/><rect x="47" y="54.11" width="46" height="20" stroke="#FFF" stroke-width="10" fill="none"/><line x1="41" y1="97.11" x2="41" y2="129.11" stroke="#FFF" stroke-width="10" fill="none"/><line x1="25" y1="113.11" x2="57" y2="113.11" stroke="#FFF" stroke-width="10" fill="none"/></svg></div>
+        <h3>Self-Attested Wins</h3>
+        <p>Survey signals don&rsquo;t meet CFO-grade auditable value standards.</p>
+        <div class="credibility-scale">
+          <div class="scale-track">
+            <div class="scale-fill"></div>
+            <div class="scale-marker low">
+              <div class="scale-marker-dot"></div>
+              <div class="scale-marker-label">Anecdotal</div>
+            </div>
+            <div class="scale-marker high">
+              <div class="scale-marker-dot"></div>
+              <div class="scale-marker-label">Auditable</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Missing Risk & Leakage View -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 355.49 355.49" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="c-cp"><path d="M22.87 185.42 37.87 170.08 0 170.08 0 185.42Z" fill="none"/></clipPath><clipPath id="c-cp1"><path d="M332.62 170.08 317.62 185.42 355.49 185.42 355.49 170.08Z" fill="none"/></clipPath><clipPath id="c-cp2"><path d="M185.42 22.87 170.08 37.87 170.08 0 185.42 0Z" fill="none"/></clipPath><clipPath id="c-cp3"><path d="M170.08 332.62 185.42 317.62 185.42 355.49 170.08 355.49Z" fill="none"/></clipPath></defs><path d="M226.33 126.39 303.64 137.54 247.72 192.18 260.99 269.17 191.86 232.83 122.73 269.3 135.81 192.24 79.82 137.8 157.13 126.46 191.66 56.36Z" fill="#039FB8"/><line x1="77.22" y1="278.81" x2="55.53" y2="300.51" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="301.05" y1="54.99" x2="279.35" y2="76.68" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="77.22" y1="76.68" x2="55.53" y2="54.99" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="301.05" y1="300.51" x2="279.35" y2="278.81" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M212.89 141.31 290.2 152.46 234.28 207.1 247.55 284.09 178.42 247.75 109.29 284.22 122.37 207.16 66.38 152.72 143.69 141.38 178.22 71.28Z" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#c-cp)"><line x1="35.36" y1="177.75" x2="4.68" y2="177.75" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#c-cp1)"><line x1="320.13" y1="177.75" x2="350.81" y2="177.75" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#c-cp2)"><line x1="177.75" y1="35.36" x2="177.75" y2="4.68" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#c-cp3)"><line x1="177.75" y1="320.13" x2="177.75" y2="350.81" stroke="#FFF" stroke-width="10" fill="none"/></g></svg></div>
+        <h3>Missing Risk &amp; Leakage View</h3>
+        <p>No quantification of value leakage or governance risk.</p>
+        <div class="leak-dashboard">
+          <div class="leak-item">
+            <div class="leak-dot critical"></div>
+            <span class="leak-label">Unsanctioned workflows</span>
+          </div>
+          <div class="leak-item">
+            <div class="leak-dot warning"></div>
+            <span class="leak-label">Untracked AI spend</span>
+          </div>
+          <div class="leak-item">
+            <div class="leak-dot critical"></div>
+            <span class="leak-label">Shadow AI usage</span>
+          </div>
+          <div class="leak-item">
+            <div class="leak-dot warning"></div>
+            <span class="leak-label">Governance gaps</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- License Counts, Not Coherence -->
+      <div class="trap-card reveal">
+        <div class="trap-icon"><svg viewBox="0 0 331.11 280.53" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="d-cp"><path d="M98.61 253.74 72.2 280.14 73.31 279.98 72.05 280.53 233.06 280.53 259.46 254.13Z" fill="none"/></clipPath></defs><path d="M0 86 0 0 86 0Z" fill="#039FB8"/><path d="M161.34 144.53 222.61 205.8 222.61 156.95C217.76 152.1 215.04 149.38 210.19 144.53Z" fill="#039FB8"/><rect x="137.26" y="228.45" width="65.59" height="34.6" stroke="#FFF" stroke-width="10" fill="none"/><rect x="14" y="13.04" width="312.11" height="215.4" stroke="#FFF" stroke-width="10" fill="none"/><rect x="44.46" y="41.74" width="251.19" height="158.01" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#d-cp)"><line x1="83.25" y1="263.05" x2="256.86" y2="263.05" stroke="#FFF" stroke-width="10" fill="none"/></g><path d="M131.5 196.02 131.5 161.94 148.91 144.53 191.96 144.53 208.61 161.94 208.61 196.02" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="170.06" cy="104.85" r="22.71" stroke="#FFF" stroke-width="10" fill="none"/></svg></div>
+        <h3>License Counts, Not Coherence</h3>
+        <p>Tool footprint doesn&rsquo;t prove integration into critical processes.</p>
+        <div class="network-visual">
+          <div class="network-side disconnected">
+            <div class="net-label">Disconnected</div>
+            <div class="net-nodes">
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+            </div>
+          </div>
+          <span class="net-vs">vs</span>
+          <div class="network-side connected">
+            <div class="net-label">Integrated</div>
+            <div class="net-nodes linked">
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+              <span class="net-node"></span>
+              <svg class="net-lines" viewBox="0 0 60 40">
+                <line x1="10" y1="10" x2="40" y2="10" stroke="var(--cyan)" stroke-width="1" opacity="0.5"/>
+                <line x1="10" y1="10" x2="10" y2="30" stroke="var(--cyan)" stroke-width="1" opacity="0.5"/>
+                <line x1="40" y1="10" x2="40" y2="30" stroke="var(--cyan)" stroke-width="1" opacity="0.5"/>
+                <line x1="10" y1="30" x2="40" y2="30" stroke="var(--cyan)" stroke-width="1" opacity="0.5"/>
+                <line x1="10" y1="10" x2="40" y2="30" stroke="var(--cyan)" stroke-width="1" opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison-wrapper reveal">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Vanity Metric</th>
+            <th>Real Value Measure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Adoption</td>
+            <td class="vanity-col">Unique users, % FTEs &ldquo;active&rdquo;</td>
+            <td class="value-col">Task-level depth, first-pass acceptance</td>
+          </tr>
+          <tr>
+            <td>Knowledge</td>
+            <td class="vanity-col">Training completion rates</td>
+            <td class="value-col">On-the-job proficiency, prompt discipline</td>
+          </tr>
+          <tr>
+            <td>Activity</td>
+            <td class="vanity-col">Raw prompts, workspaces, LLM cost</td>
+            <td class="value-col">Cycle-time &amp; margin lift, cost-per-artifact</td>
+          </tr>
+          <tr>
+            <td>Coverage</td>
+            <td class="vanity-col">License footprint</td>
+            <td class="value-col">Value stream integration, shadow AI displacement</td>
+          </tr>
+          <tr>
+            <td>Credibility</td>
+            <td class="vanity-col">Self-reported wins</td>
+            <td class="value-col">Auditable outcomes, control completeness</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 2: WHY NORTH HIGHLAND ═══════════ -->
+<section id="measure">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">WHAT YOU ACTUALLY NEED</div>
+    <h2 class="reveal">What Financial Services leaders<br>actually need</h2>
+    <p class="section-lead reveal">Metrics that prove <strong style="color:var(--navy)">behavior, business impact, and risk management</strong> &mdash; the three pillars for credible AI programs in Financial Services.</p>
+
+    <div class="measure-columns">
+      <div class="measure-card reveal">
+        <h3><span class="m-icon"><svg viewBox="0 0 289.19 289.19" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><clipPath id="e-cp"><path d="M106.74 100.64 86.64 80.55 197.6 80.6 197.6 153.6 105.6 153.6Z" fill="none"/></clipPath><clipPath id="e-cp1"><path d="M106.74 210.95 86.64 190.85 86.64 136.6 211.6 136.6 211.6 210.6Z" fill="none"/></clipPath></defs><circle cx="144.6" cy="144.6" r="107.7" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="115.85" y1="70.19" x2="115.85" y2="219.01" stroke="#FFF" stroke-width="10" fill="none"/><line x1="148.92" y1="200.9" x2="148.92" y2="219.01" stroke="#FFF" stroke-width="10" fill="none"/><line x1="148.92" y1="70.19" x2="148.92" y2="90.91" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="144.6" cy="144.6" r="139.6" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#e-cp)"><path d="M91.78 90.91 158.34 90.91C173.53 90.91 185.84 103.22 185.84 118.41 185.84 133.6 173.53 145.91 158.34 145.91L117.83 145.91" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#e-cp1)"><path d="M117.83 145.9 169.92 145.9C185.11 145.9 197.42 158.21 197.42 173.4 197.42 188.59 185.11 200.9 169.92 200.9L91.79 200.9" stroke="#FFF" stroke-width="10" fill="none"/></g></svg></span> Outcomes &amp; Growth Impact</h3>
+        <ul>
+          <li>Cycle-time reduction across key workflows</li>
+          <li>Impact on conversion, margin, revenue capture</li>
+        </ul>
+        <div class="roi-dashboard">
+          <div class="roi-row">
+            <span class="roi-label">Cost / Artifact</span>
+            <span class="roi-value down">&#x2193; 34%</span>
+          </div>
+          <div class="roi-row">
+            <span class="roi-label">Cycle Time</span>
+            <span class="roi-value down">&#x2193; 28%</span>
+          </div>
+          <div class="roi-row">
+            <span class="roi-label">Revenue Lift</span>
+            <span class="roi-value up">&#x2191; 12%</span>
+          </div>
+        </div>
+      </div>
+      <div class="measure-card reveal">
+        <h3><span class="m-icon"><svg viewBox="0 0 354.5 354.5" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="115.05" y="136.25" width="161.09" height="48.97" fill="#039FB8" transform="matrix(0.707107 0.707107 -0.707107 0.707107 170.94 -91.23)"/><path d="M136.5 89.27C139.81 77.05 139.57 64.15 135.83 52.06 132.09 39.97 124.99 29.19 115.36 20.98 105.73 12.77 93.96 7.46 81.43 5.67 68.9 3.88 56.12 5.69 44.58 10.89L84.31 50.62 79.02 78.4 47.96 86.96 9.33 48.32C4.99 59.78 3.89 72.22 6.14 84.27 8.39 96.32 13.92 107.51 22.11 116.63 30.3 125.75 40.84 132.44 52.58 135.97 64.32 139.5 76.8 139.74 88.66 136.65L217.86 265.85C214.77 277.71 215.01 290.19 218.54 301.93 222.07 313.67 228.76 324.21 237.88 332.4 247 340.59 258.19 346.11 270.24 348.37 282.29 350.62 294.72 349.52 306.19 345.18L267.56 306.55 276.12 275.49 303.9 270.2 343.63 309.93C348.82 298.39 350.63 285.61 348.85 273.08 347.06 260.55 341.76 248.79 333.54 239.15 325.33 229.52 314.55 222.42 302.46 218.68 290.37 214.94 277.47 214.7 265.25 218.01Z" stroke="#FFF" stroke-width="10" fill="none"/><path d="M80.29 179.33 49.92 179.33 34.74 205.63 49.92 231.92 80.29 231.92 95.47 205.63Z" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="65.11" cy="205.63" r="8.69" stroke="#FFF" stroke-width="10" fill="none"/><path d="M145.28 278.4 116.98 267.39 93.3 286.39 97.91 316.4 126.21 327.41 149.89 308.41Z" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="121.6" cy="297.4" r="8.69" stroke="#FFF" stroke-width="10" fill="none"/><path d="M250.14 20.42 220.27 25.89 210.08 54.49 229.75 77.62 259.62 72.15 269.81 43.55Z" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="239.94" cy="49.02" r="8.69" stroke="#FFF" stroke-width="10" fill="none"/></svg></span> Depth &amp; Discipline</h3>
+        <ul>
+          <li>% of priority tasks with guided, sanctioned prompts</li>
+          <li>First-pass acceptance rate of AI-generated artifacts</li>
+        </ul>
+        <div class="depth-meter">
+          <div class="depth-track">
+            <div class="depth-fill" style="width:75%"></div>
+          </div>
+          <div class="depth-labels">
+            <span class="depth-label-left">Dabbling</span>
+            <span class="depth-label-right">Disciplined Use</span>
+          </div>
+        </div>
+      </div>
+      <div class="measure-card reveal">
+        <h3><span class="m-icon"><svg viewBox="0 0 251.2 323.99" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><clipPath id="f-cp"><path d="M154.91 258.2 128.55 284.62 128.1 228 154.91 228Z" fill="none"/></clipPath><clipPath id="f-cp1"><path d="M94.82 96.29 68.47 122.72 68.1 0 216.1 0 216.1 140 94.82 140Z" fill="none"/></clipPath></defs><ellipse cx="154.71" cy="210.84" rx="21" ry="21.05" fill="#479EB6"/><line x1="38.08" y1="118" x2="16.46" y2="96.32" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="30.58" y1="135.18" x2="0" y2="135.18" stroke="#039FB8" stroke-width="10" fill="none"/><line x1="56.22" y1="114.48" x2="56.22" y2="83.83" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M37.26 219.69C37.33 246 47.79 271.22 66.36 289.82 84.92 308.42 110.07 318.91 136.32 318.99L147.13 318.99C173.38 318.92 198.53 308.43 217.09 289.82 235.65 271.21 246.11 246 246.19 219.69 246.16 204.96 243.26 190.22 236.54 177.12 225.8 156.16 209.62 142.8 209.62 142.8L73.77 142.8C73.77 142.8 56.93 154.76 46.88 177.12 40.57 190.42 37.28 204.95 37.26 219.68Z" stroke="#FFF" stroke-width="10" fill="none"/><circle cx="141.49" cy="210.84" r="21" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#f-cp)"><line x1="141.73" y1="277.65" x2="141.73" y2="231.89" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#f-cp1)"><path d="M196.7 137.75 196.7 74.71C196.7 59.41 190.64 44.73 179.84 33.91 169.04 23.09 154.4 17.01 139.14 17.01 123.89 17.03 109.26 23.12 98.48 33.93 87.7 44.75 81.65 59.41 81.65 74.71L81.65 117.63" stroke="#FFF" stroke-width="10" fill="none"/></g></svg></span> Safety &amp; Control</h3>
+        <ul>
+          <li>Citation completeness &amp; auditability</li>
+          <li>Model/policy conformance rates</li>
+        </ul>
+        <div class="control-tower">
+          <div class="control-row">
+            <span class="control-indicator green"></span>
+            <span class="control-text">Citation audit &mdash; Visible</span>
+          </div>
+          <div class="control-row">
+            <span class="control-indicator amber"></span>
+            <span class="control-text">Policy conformance &mdash; Partial Visibility</span>
+          </div>
+          <div class="control-row">
+            <span class="control-indicator red"></span>
+            <span class="control-text">Shadow AI risk &mdash; Blind Spot</span>
+          </div>
+        </div>
+      </div>
+      <div class="measure-card reveal">
+        <h3><span class="m-icon"><svg viewBox="0 0 356.65 260" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><defs><clipPath id="g-cp"><rect x="85.95" y="40" width="67.81" height="125.05" fill="none"/></clipPath><clipPath id="g-cp1"><path d="M130.46 99.09 170.52 58.89 205.76 58.89 205.76 127.29 130.46 127.29Z" fill="none"/></clipPath><clipPath id="g-cp2"><path d="M279.58 117.56 279.58 82.92 313.87 48.62 356.65 91.4 282.23 165.83 248.36 131.96 261.27 119.05Z" fill="none"/></clipPath></defs><path d="M163.76 213 175.76 213 200.76 145 163.76 145Z" fill="#039FB8"/><path d="M23.76 130C23.76 60.96 79.72 5 148.76 5 183.28 5 214.53 18.99 237.15 41.61" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M61.08 219.09C83.64 241.3 114.6 255 148.76 255 217.8 255 273.76 199.04 273.76 130L297.76 107" stroke="#039FB8" stroke-width="10" fill="none"/><path d="M158.76 111 198.76 111 158.76 223 148.76 223 148.76 150 118.78 150" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#g-cp)"><path d="M148.76 26 98.76 150 148.76 150" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#g-cp1)"><path d="M148.7 70 148.7 111 198.54 111" stroke="#FFF" stroke-width="10" fill="none"/></g><path d="M15 132.66 35 132.66C38.91 136.57 41.09 138.75 45 142.66L45 172.66 5 172.66 5 142.66C8.91 138.75 11.09 136.57 15 132.66Z" stroke="#FFF" stroke-width="10" fill="none"/><line x1="35.1" y1="172.66" x2="35.1" y2="196.6" stroke="#FFF" stroke-width="10" fill="none"/><line x1="15.1" y1="172.66" x2="15.1" y2="196.6" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#g-cp2)"><path d="M268.76 133 285.45 133C294.63 133 303.46 129.46 310.1 123.11 317.13 116.38 321.11 107.08 321.11 97.35L321.11 83.58 309.93 83.58C300.5 83.58 291.46 87.31 284.78 93.96L275.12 103.58" stroke="#FFF" stroke-width="10" fill="none"/></g><path d="M243.76 104 250.33 104C255.02 104 259.56 105.65 263.16 108.66L264.75 109.99C269.32 113.81 271.95 119.47 271.92 125.42L271.89 133 264.76 133C260.31 133 255.98 131.51 252.47 128.78L251.48 128.01C246.61 124.22 243.77 118.4 243.77 112.23Z" stroke="#FFF" stroke-width="10" fill="none"/></svg></span> Sustainability</h3>
+        <ul>
+          <li>Cohort retention at 30/60/90 days</li>
+          <li>Manager reinforcement behaviors</li>
+        </ul>
+        <div class="retention-curve">
+          <svg viewBox="0 0 160 60" class="retention-svg">
+            <line x1="0" y1="58" x2="160" y2="58" stroke="rgba(19,46,83,0.15)" stroke-width="1"/>
+            <polyline points="0,10 40,14 80,20 120,28 160,52" fill="none" stroke="rgba(255,95,87,0.5)" stroke-width="2" stroke-dasharray="4,3"/>
+            <polyline points="0,10 40,12 80,15 120,18 160,22" fill="none" stroke="var(--navy)" stroke-width="2"/>
+            <circle cx="160" cy="22" r="3" fill="var(--navy)"/>
+            <circle cx="160" cy="52" r="3" fill="rgba(255,95,87,0.5)"/>
+          </svg>
+          <div class="retention-legend">
+            <span class="ret-leg sustainable"><span class="ret-dot"></span> With Reinforcement</span>
+            <span class="ret-leg declining"><span class="ret-dot"></span> Without Intervention</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 3: THE COMPLETE SOLUTION ═══════════ -->
+<section id="solution">
+  <div class="section-inner">
+    <div class="solution-header">
+      <div class="section-eyebrow reveal">OUR APPROACH</div>
+      <h2 class="reveal">AI Adoption Reality Check<br>&amp; Value Recovery</h2>
+      <p class="solution-tagline reveal">Convert vanity metrics into Financial Services-grade adoption, value, and control</p>
+      <div class="reveal"><span class="engagement-badge">6 &ndash; 8 Week Engagement</span></div>
+      <p class="section-lead reveal" style="margin-left:auto;margin-right:auto;text-align:center;font-size:0.85rem;max-width:720px;margin-top:0.5rem;">Timeline assumes direct access to telemetry, stakeholders, and usage data. Where client-side data access requires additional coordination, we flex timing accordingly. We offer three engagement models: embedded (on-site), remote with periodic workshops, or hybrid.</p>
+    </div>
+
+    <!-- ── Roadmap Overview Bar ── -->
+    <div class="roadmap-overview reveal">
+      <div class="roadmap-step active" data-phase="1">
+        <div class="roadmap-num">1</div>
+        <div class="roadmap-label">Truth Baseline</div>
+        <div class="roadmap-weeks">Weeks 1&ndash;3</div>
+      </div>
+      <div class="roadmap-connector"></div>
+      <div class="roadmap-step" data-phase="2">
+        <div class="roadmap-num">2</div>
+        <div class="roadmap-label">Root-Cause X-Ray</div>
+        <div class="roadmap-weeks">Weeks 3&ndash;5</div>
+      </div>
+      <div class="roadmap-connector"></div>
+      <div class="roadmap-step" data-phase="3">
+        <div class="roadmap-num">3</div>
+        <div class="roadmap-label">90-Day Rescue &amp; Proof Plan</div>
+        <div class="roadmap-weeks">Weeks 5&ndash;8</div>
+      </div>
+    </div>
+
+    <!-- ── Phase 1: Truth Baseline ── -->
+    <div class="phase-block reveal" id="phase-1">
+      <div class="phase-number">1</div>
+      <div class="phase-header">
+        <div class="phase-header-toggle" data-target="phase-1-content">
+          <h3>Truth Baseline</h3>
+          <span class="phase-tag">Weeks 1&ndash;3</span>
+          <span class="toggle-icon">&#x25BC;</span>
+        </div>
+      </div>
+      <p class="phase-objective"><strong>Objective:</strong> Instrument the full funnel from logins to commercial outcomes</p>
+
+      <div class="phase-content" id="phase-1-content">
+        <div class="method-grid">
+          <!-- AI Adoption Funnel -->
+          <div class="method-card">
+            <h4>AI Adoption Funnel</h4>
+            <p>Convert your AI environment into a conversion funnel. Measure where people bounce and where work dies.</p>
+            <div class="funnel-visual">
+              <div class="funnel-stage">Exposure</div>
+              <div class="funnel-stage">Engage</div>
+              <div class="funnel-stage">Output</div>
+              <div class="funnel-stage">Accept</div>
+              <div class="funnel-stage">Impact</div>
+            </div>
+            <div class="method-visual-label">Feeds into: Adoption Reality Index</div>
+          </div>
+
+          <!-- Usage Behavior Analysis -->
+          <div class="method-card">
+            <h4>Usage Behavior Analysis</h4>
+            <p>Proprietary diagnostic indices that reveal how work actually gets done:</p>
+            <ul>
+              <li>Prompt Discipline Index</li>
+              <li>Artifact Integrity Score</li>
+              <li>Team Flow Map</li>
+              <li>Role Fit Score</li>
+            </ul>
+            <div class="heatmap-mini">
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.15)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.3)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.7)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.5)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.2)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.8)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.6)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.1)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.4)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.9)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.3)"></div>
+              <div class="heatmap-cell" style="background:rgba(3,159,184,0.5)"></div>
+            </div>
+            <div class="method-visual-label">Feeds into: Usage Audit Report</div>
+          </div>
+
+          <!-- AI-Facilitated Diagnostic Interviews -->
+          <div class="method-card">
+            <h4>AI-Facilitated Diagnostic Interviews</h4>
+            <p>AI-enabled transcript analysis revealing confidence vs. competence gaps:</p>
+            <div class="persona-grid">
+              <span class="persona-badge dabblers">Dabblers</span>
+              <span class="persona-badge power">Power Users</span>
+              <span class="persona-badge shadow">Shadow AI Users</span>
+              <span class="persona-badge avoiders">Avoiders</span>
+            </div>
+            <div class="method-visual-label">Feeds into: Diagnostic Interview Analysis</div>
+          </div>
+        </div>
+
+        <div class="deliverables">
+          <div class="deliverables-label">Deliverables</div>
+          <span class="deliverable-tag" data-tooltip="Quantitative scorecard showing true AI adoption depth across teams and use cases">Adoption Reality Index</span>
+          <span class="deliverable-tag" data-tooltip="Detailed analysis of behavioral patterns, prompt quality, and workflow integration">Usage Audit Report</span>
+          <span class="deliverable-tag" data-tooltip="Structured insights from stakeholder interviews revealing confidence vs. competence gaps">Diagnostic Interview Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 2: Root-Cause X-Ray ── -->
+    <div class="phase-block reveal" id="phase-2">
+      <div class="phase-number">2</div>
+      <div class="phase-header">
+        <div class="phase-header-toggle" data-target="phase-2-content">
+          <h3>Root-Cause X-Ray</h3>
+          <span class="phase-tag">Weeks 3&ndash;5</span>
+          <span class="toggle-icon">&#x25BC;</span>
+        </div>
+      </div>
+      <p class="phase-objective"><strong>Objective:</strong> Map AI to priority value streams and identify value leakage</p>
+
+      <div class="phase-content" id="phase-2-content">
+        <div class="method-grid">
+          <!-- Value Stream Task Decomposition -->
+          <div class="method-card">
+            <h4>Value Stream Task Decomposition</h4>
+            <p>Map AI to actual work by breaking workflows into atomic tasks and overlaying AI impact density:</p>
+            <div class="spot-indicators">
+              <div class="spot cold"><div class="spot-dot cold"></div> Cold spots: No AI where there should be</div>
+              <div class="spot hot"><div class="spot-dot hot"></div> Hot spots: High AI, low impact</div>
+              <div class="spot blocked"><div class="spot-dot blocked"></div> Blocked: Attempted then abandoned</div>
+            </div>
+            <div class="method-visual-label">Feeds into: Value Leakage Map</div>
+          </div>
+
+          <!-- Control, Risk & Credibility Scan -->
+          <div class="method-card">
+            <h4>Control, Risk &amp; Credibility Scan</h4>
+            <p>Financial Services-grade evaluation through three lenses:</p>
+            <ul>
+              <li><strong>Governance Breakpoints:</strong> Where people circumvent policy</li>
+              <li><strong>Shadow AI Gravity:</strong> Where employees avoid internal tools</li>
+              <li><strong>Credibility Cliffs:</strong> Where AI failures erode organizational trust</li>
+            </ul>
+            <div class="method-visual-label">Feeds into: Control &amp; Credibility Scorecard</div>
+          </div>
+
+          <!-- Ways-of-Working Friction Matrix -->
+          <div class="method-card">
+            <h4>Ways-of-Working Friction Matrix</h4>
+            <p>Root-cause tree connecting technical, behavioral, and organizational frictions:</p>
+            <ul>
+              <li>Handoff breakdowns where AI disrupts teamwork</li>
+              <li>Decision gates where trust blocks AI advancement</li>
+              <li>Knowledge bottlenecks forcing reinvention</li>
+              <li>Managerial reinforcement gaps</li>
+            </ul>
+            <div class="method-visual-label">Feeds into: Friction &amp; Root-Cause Report</div>
+          </div>
+        </div>
+
+        <div class="deliverables">
+          <div class="deliverables-label">Deliverables</div>
+          <span class="deliverable-tag" data-tooltip="Visual map of where AI value is being lost across priority workflows">Value Leakage Map</span>
+          <span class="deliverable-tag" data-tooltip="Financial Services-grade assessment of governance gaps, shadow AI risk, and credibility exposure">Control &amp; Credibility Scorecard</span>
+          <span class="deliverable-tag" data-tooltip="Root-cause analysis of technical, behavioral, and organizational barriers to AI adoption">Friction &amp; Root-Cause Report</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Phase 3: 90-Day Rescue & Proof Plan ── -->
+    <div class="phase-block reveal" id="phase-3">
+      <div class="phase-number">3</div>
+      <div class="phase-header">
+        <div class="phase-header-toggle" data-target="phase-3-content">
+          <h3>90-Day Rescue &amp; Proof Plan</h3>
+          <span class="phase-tag">Weeks 5&ndash;8</span>
+          <span class="toggle-icon">&#x25BC;</span>
+        </div>
+      </div>
+      <p class="phase-objective"><strong>Objective:</strong> Reprioritize use cases and prove before/after value</p>
+
+      <div class="phase-content" id="phase-3-content">
+        <div class="method-grid">
+          <!-- AI Fit for Work Assessment -->
+          <div class="method-card">
+            <h4>AI Fit for Work Assessment</h4>
+            <p>Score every candidate workflow across three dimensions (scope and depth depend on number of workflows and data access):</p>
+            <div class="scoring-row">
+              <span class="score-label">Feasibility</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width:80%"></div></div>
+            </div>
+            <div class="scoring-row">
+              <span class="score-label">Behavioral Fit</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width:65%"></div></div>
+            </div>
+            <div class="scoring-row">
+              <span class="score-label">Credibility Impact</span>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width:90%"></div></div>
+            </div>
+            <div class="method-visual-label">Feeds into: 90-Day Rescue Plan</div>
+          </div>
+
+          <!-- Guided Prompts & Knowledge Redesign -->
+          <div class="method-card">
+            <h4>Guided Prompts &amp; Knowledge Redesign</h4>
+            <p>Rebuild workflows with task-specific prompt patterns and reusable workspaces:</p>
+            <ul>
+              <li>Role + Task + Structure prompt patterns</li>
+              <li>Pre-approved knowledge components</li>
+              <li>AI guardrails: what good looks like, what to avoid</li>
+            </ul>
+            <div class="method-visual-label">Feeds into: 90-Day Rescue Plan</div>
+          </div>
+
+          <!-- Human-in-the-Loop Operating Model -->
+          <div class="method-card">
+            <h4>Human-in-the-Loop Operating Model</h4>
+            <p>Approval gates with citable sources and confidence scoring:</p>
+            <div class="workflow-steps">
+              <span class="wf-step">AI Draft</span>
+              <span class="wf-arrow">&rarr;</span>
+              <span class="wf-step checkpoint">Review Gate</span>
+              <span class="wf-arrow">&rarr;</span>
+              <span class="wf-step">Citation Check</span>
+              <span class="wf-arrow">&rarr;</span>
+              <span class="wf-step checkpoint">Approval</span>
+              <span class="wf-arrow">&rarr;</span>
+              <span class="wf-step">Audit Trail</span>
+            </div>
+            <div class="method-visual-label">Feeds into: Governance Operating Rhythm</div>
+          </div>
+
+          <!-- Behavioral Reinforcement Engine -->
+          <div class="method-card">
+            <h4>Behavioral Reinforcement Engine</h4>
+            <p>Telemetry-driven coaching and nudges that build real habit formation:</p>
+            <div class="cycle-visual">
+              <span class="cycle-node">Coach</span>
+              <span class="cycle-node">Standup</span>
+              <span class="cycle-node">Nudge</span>
+              <span class="cycle-node">Recognize</span>
+              <span class="cycle-node">Measure</span>
+              <span class="cycle-node">Repeat</span>
+            </div>
+            <div class="method-visual-label">Feeds into: Board-Ready Value Story</div>
+          </div>
+        </div>
+
+        <div class="deliverables">
+          <div class="deliverables-label">Deliverables</div>
+          <span class="deliverable-tag" data-tooltip="Prioritized action plan with quick wins and longer-term value recovery milestones">90-Day Rescue Plan</span>
+          <span class="deliverable-tag" data-tooltip="Executive-ready narrative with auditable metrics proving AI business impact">Board-Ready Value Story</span>
+          <span class="deliverable-tag" data-tooltip="Sustainable operating model for ongoing AI governance, monitoring, and reinforcement">Governance Operating Rhythm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SECTION 4: GET STARTED ═══════════ -->
+<section id="getstarted">
+  <div class="section-inner">
+    <div class="getstarted-header">
+      <div class="section-eyebrow reveal">YOUR PATH FORWARD</div>
+      <h2 class="reveal">Ready to recover AI value?<br>Here's how we begin.</h2>
+    </div>
+
+    <!-- Three Ways to Engage -->
+    <div class="engage-grid reveal">
+      <!-- Option 1 -->
+      <div class="engage-card">
+        <div class="engage-option-label">Option 1</div>
+        <h3>Executive Briefing</h3>
+        <div class="engage-duration">1 Hour</div>
+        <ul>
+          <li>Walk through your current AI metrics and surface blind spots hiding value leakage</li>
+          <li>Benchmark against Financial Services-grade measurement standards used by leading institutions</li>
+          <li>Leave with a preliminary view of where AI value is being lost and what to prioritize</li>
+        </ul>
+        <div class="engage-visual-hint">Executive dashboard: current vs. target state</div>
+      </div>
+
+      <!-- Option 2 (RECOMMENDED) -->
+      <div class="engage-card featured">
+        <div class="engage-option-label">Option 2</div>
+        <h3>Full Value Recovery</h3>
+        <div class="engage-duration">6&ndash;8 Weeks</div>
+        <ul>
+          <li>Complete Truth Baseline, Root-Cause X-Ray, and 90-Day Rescue</li>
+          <li>Board-ready value story with auditable outcomes</li>
+          <li>Sustainable governance operating rhythm</li>
+        </ul>
+        <div class="engage-visual-hint">Full engagement timeline with milestones</div>
+      </div>
+
+      <!-- Option 3 -->
+      <div class="engage-card">
+        <div class="engage-option-label">Option 3</div>
+        <h3>Enterprise Transformation Program</h3>
+        <div class="engage-duration">12+ Weeks</div>
+        <ul>
+          <li>Everything in Full Value Recovery plus multi-business-line rollout</li>
+          <li>Dedicated embedded team with ongoing telemetry and coaching</li>
+          <li>Enterprise-wide governance framework and change management</li>
+          <li>Quarterly board reporting with continuous value tracking</li>
+        </ul>
+        <div class="engage-visual-hint">Enterprise roadmap with phased rollout plan</div>
+      </div>
+    </div>
+
+    <!-- What You Get -->
+    <div class="wyg-section reveal">
+      <h3>What You Get</h3>
+      <div class="wyg-grid">
+        <div class="wyg-card">
+          <div class="wyg-icon"><svg viewBox="0 0 227.42 321" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><path d="M144.99 55.77 42.34 55.77 93.67 4.44Z" fill="#039FB8"/><path d="M2.73 168.51C17.07 159.15 37.19 162.89 50.47 173.7 63.75 184.51 71.26 200.9 75.96 217.37 80.66 233.83 83.02 250.93 88.41 267.19 93.8 283.44 102.81 299.32 117.34 308.37 139.4 322.1 169.95 316.23 189.55 299.17 209.15 282.11 219.08 256.15 222.46 230.38" stroke="#039FB8" stroke-width="10" fill="none"/><rect x="76.06" y="7.62" width="58.47" height="175.42" stroke="#FFF" stroke-width="10" fill="none" transform="matrix(0.696664 -0.717397 0.717397 0.696664 -36.45 104.47)"/><path d="M22 55.21C10.41 43.96 10.14 25.45 21.39 13.87 32.64 2.29 51.15 2.01 62.73 13.26" stroke="#FFF" stroke-width="10" fill="none"/><path d="M147.86 177.41 175.13 203.88 216.6 203.27 215.99 161.94 188.65 135.4" stroke="#FFF" stroke-width="10" fill="none"/></svg></div>
+          <h4>Unlocked Value Visibility</h4>
+          <p>See exactly where AI value is stranded. Quantify the revenue, efficiency, and cost gains you should be capturing.</p>
+        </div>
+        <div class="wyg-card">
+          <div class="wyg-icon"><svg viewBox="0 0 319.07 268.55" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="h-cp"><path d="M0 268.55 20.1 248.46 319.07 248.46 319.07 268.1Z" fill="none"/></clipPath><clipPath id="h-cp1"><path d="M23.7 237.01 43.8 216.91 300.07 216.91 300.07 237.1Z" fill="none"/></clipPath></defs><path d="M41.12 149.32 41.12 100.65 89.79 100.65Z" fill="#479CB4"/><path d="M125.26 149.32 125.26 100.65 173.92 100.65Z" fill="#479CB4"/><path d="M209.39 149.32 209.39 100.65 258.06 100.65Z" fill="#479CB4"/><circle cx="159.5" cy="44.85" r="18.38" fill="#479CB4"/><line x1="97.52" y1="101.09" x2="97.52" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><line x1="52.44" y1="101.09" x2="52.44" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><line x1="182.04" y1="101.09" x2="182.04" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><line x1="136.95" y1="101.09" x2="136.95" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><line x1="266.55" y1="101.09" x2="266.55" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><line x1="221.47" y1="101.09" x2="221.47" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/><path d="M290.17 74.1 290.17 103.39 28.82 103.39 28.82 74.1 159.5 5.64Z" stroke="#FFF" stroke-width="10" fill="none"/><line x1="28.82" y1="74.1" x2="290.17" y2="74.1" stroke="#FFF" stroke-width="10" fill="none"/><g clip-path="url(#h-cp)"><line x1="4.85" y1="258.51" x2="314.14" y2="258.51" stroke="#FFF" stroke-width="10" fill="none"/></g><g clip-path="url(#h-cp1)"><line x1="29.17" y1="226.27" x2="289.82" y2="226.27" stroke="#FFF" stroke-width="10" fill="none"/></g></svg></div>
+          <h4>Auditable Value Story</h4>
+          <p>Board-ready proof of AI ROI with traceable metrics that satisfy CFOs, regulators, and stakeholders.</p>
+        </div>
+        <div class="wyg-card">
+          <div class="wyg-icon"><svg viewBox="0 0 354.5 354.5" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><g><rect x="115.05" y="136.25" width="161.09" height="48.97" fill="#039FB8" transform="matrix(0.707107 0.707107 -0.707107 0.707107 170.94 -91.23)"/></g><g><path d="M136.5 89.27C139.81 77.05 139.57 64.15 135.83 52.06 132.09 39.97 124.99 29.19 115.36 20.98 105.73 12.77 93.96 7.46 81.43 5.67 68.9 3.88 56.12 5.69 44.58 10.89L84.31 50.62 79.02 78.4 47.96 86.96 9.33 48.32C4.99 59.78 3.89 72.22 6.14 84.27 8.39 96.32 13.92 107.51 22.11 116.63 30.3 125.75 40.84 132.44 52.58 135.97 64.32 139.5 76.8 139.74 88.66 136.65L217.86 265.85C214.77 277.71 215.01 290.19 218.54 301.93 222.07 313.67 228.76 324.21 237.88 332.4 247 340.59 258.19 346.11 270.24 348.37 282.29 350.62 294.72 349.52 306.19 345.18L267.56 306.55 276.12 275.49 303.9 270.2 343.63 309.93C348.82 298.39 350.63 285.61 348.85 273.08 347.06 260.55 341.76 248.79 333.54 239.15 325.33 229.52 314.55 222.42 302.46 218.68 290.37 214.94 277.47 214.7 265.25 218.01L136.5 89.27Z" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><path d="M80.29 179.33 49.92 179.33 34.74 205.63 49.92 231.92 80.29 231.92 95.47 205.63 80.29 179.33Z" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><circle cx="65.11" cy="205.63" r="8.69" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><path d="M145.28 278.4 116.98 267.39 93.3 286.39 97.91 316.4 126.21 327.41 149.89 308.41 145.28 278.4Z" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><circle cx="121.6" cy="297.4" r="8.69" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><path d="M250.14 20.42 220.27 25.89 210.08 54.49 229.75 77.62 259.62 72.15 269.81 43.55 250.14 20.42Z" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><circle cx="239.94" cy="49.02" r="8.69" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/></g></svg></div>
+          <h4>Continuous Value Realization</h4>
+          <p>A sustainable operating rhythm that compounds AI returns across teams quarter over quarter.</p>
+        </div>
+        <div class="wyg-card">
+          <div class="wyg-icon"><svg viewBox="0 0 251.2 323.99" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><defs><clipPath id="j-cp"><path d="M154.91 258.2 128.55 284.62 128.1 228 154.91 228 154.91 258.2Z" fill="none"/></clipPath><clipPath id="j-cp1"><path d="M94.82 96.29 68.47 122.72 68.1 0 216.1 0 216.1 140 94.82 140 94.82 96.29Z" fill="none"/></clipPath></defs><ellipse cx="154.71" cy="210.84" rx="21" ry="21.05" fill="#479EB6"/><line x1="38.08" y1="118" x2="16.46" y2="96.32" stroke="#039FB8" stroke-width="10" stroke-miterlimit="10" fill="none"/><line x1="30.58" y1="135.18" x2="0" y2="135.18" stroke="#039FB8" stroke-width="10" stroke-miterlimit="10" fill="none"/><line x1="56.22" y1="114.48" x2="56.22" y2="83.83" stroke="#039FB8" stroke-width="10" stroke-miterlimit="10" fill="none"/><path d="M37.26 219.69C37.33 246 47.79 271.22 66.36 289.82 84.92 308.42 110.07 318.91 136.32 318.99L147.13 318.99C173.38 318.92 198.53 308.43 217.09 289.82 235.65 271.21 246.11 246 246.19 219.69L246.19 219.69C246.16 204.96 243.26 190.22 236.54 177.12 225.8 156.16 209.62 142.8 209.62 142.8L73.77 142.8C73.77 142.8 56.93 154.76 46.88 177.12 40.57 190.42 37.28 204.95 37.26 219.68Z" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><circle cx="141.49" cy="210.84" r="21.05" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/><g clip-path="url(#j-cp)"><path d="M141.73 277.65 141.73 231.89" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/></g><g clip-path="url(#j-cp1)"><path d="M196.7 137.75 196.7 74.71C196.7 59.41 190.64 44.73 179.84 33.91 169.04 23.09 154.4 17.01 139.14 17.01L139.14 17.01C123.89 17.03 109.26 23.12 98.48 33.93 87.7 44.75 81.65 59.41 81.65 74.71L81.65 117.63" stroke="#FFF" stroke-width="10" stroke-miterlimit="10" fill="none"/></g></svg></div>
+          <h4>Protected Value &amp; Controls</h4>
+          <p>Governance and compliance alignment that prevents value erosion and turns risk exposure into competitive advantage.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="next-steps reveal">
+      <h3>Next Steps</h3>
+      <div class="steps-flow">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <h4>Schedule Discovery Call</h4>
+          <p>30-minute conversation to assess your current state and identify quick wins</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <h4>Receive Custom Proposal</h4>
+          <p>Tailored approach based on your specific challenges and organizational context</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <h4>Begin Value Recovery</h4>
+          <p>Start seeing results within the first 2 weeks of engagement</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Hamburger
+  const menuBtn = document.getElementById('menuBtn');
+  menuBtn.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => nav.classList.remove('open'));
+  });
+
+  // Scroll reveal (subtle, once only)
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('.nav-links a[href="#' + entry.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => navObserver.observe(s));
+
+  // Phase collapse/expand toggle
+  document.querySelectorAll('.phase-header-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const targetId = toggle.getAttribute('data-target');
+      const content = document.getElementById(targetId);
+      const icon = toggle.querySelector('.toggle-icon');
+      if (content) {
+        content.classList.toggle('collapsed');
+        icon.classList.toggle('collapsed');
+      }
+    });
+  });
+
+  // Roadmap step click -> scroll to phase + expand
+  document.querySelectorAll('.roadmap-step').forEach(step => {
+    step.addEventListener('click', () => {
+      const phaseNum = step.getAttribute('data-phase');
+      const phaseEl = document.getElementById('phase-' + phaseNum);
+      const contentEl = document.getElementById('phase-' + phaseNum + '-content');
+
+      // Update active state on roadmap
+      document.querySelectorAll('.roadmap-step').forEach(s => s.classList.remove('active'));
+      step.classList.add('active');
+
+      // Expand the target phase if collapsed
+      if (contentEl && contentEl.classList.contains('collapsed')) {
+        contentEl.classList.remove('collapsed');
+        const icon = phaseEl.querySelector('.toggle-icon');
+        if (icon) icon.classList.remove('collapsed');
+      }
+
+      // Scroll to the phase
+      if (phaseEl) {
+        phaseEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
