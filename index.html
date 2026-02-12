@@ -329,14 +329,16 @@
 
   .mock-labels {
     display: flex;
-    justify-content: space-between;
+    gap: 0.75rem;
   }
 
   .mock-label {
+    flex: 1;
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     opacity: 0.5;
+    text-align: center;
   }
 
   .mock-badge {
@@ -2262,9 +2264,154 @@
       padding: 0.5rem 1rem;
     }
   }
+
+  /* ── Password Overlay ── */
+  #password-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(19, 46, 83, 0.6);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  #password-overlay.hidden {
+    display: none;
+  }
+
+  .page-content-wrapper {
+    transition: filter 0.4s ease;
+  }
+
+  .page-content-wrapper.blurred {
+    filter: blur(12px);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .password-modal {
+    background: var(--navy);
+    border: 1px solid rgba(3, 159, 184, 0.4);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(3, 159, 184, 0.15);
+    animation: modalFadeIn 0.3s ease;
+  }
+
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .password-modal .lock-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .password-modal h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+  }
+
+  .password-modal p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.5rem;
+  }
+
+  .password-modal input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(3, 159, 184, 0.3);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: var(--white);
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 1rem;
+  }
+
+  .password-modal input[type="password"]:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(3, 159, 184, 0.2);
+  }
+
+  .password-modal input[type="password"].error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+
+  .password-modal .error-msg {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    margin-top: -0.75rem;
+    margin-bottom: 0.75rem;
+    display: none;
+  }
+
+  .password-modal .error-msg.visible {
+    display: block;
+  }
+
+  .password-modal button {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--cyan);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+
+  .password-modal button:hover {
+    background: var(--cyan-dark);
+  }
+
+  .password-modal button:active {
+    transform: scale(0.98);
+  }
 </style>
 </head>
 <body>
+
+<!-- ═══════════ PASSWORD OVERLAY ═══════════ -->
+<div id="password-overlay">
+  <div class="password-modal">
+    <div class="lock-icon">&#128274;</div>
+    <h2>Protected Content</h2>
+    <p>Enter the password to view this page.</p>
+    <input type="password" id="password-input" placeholder="Enter password..." autocomplete="off" autofocus>
+    <div class="error-msg" id="password-error">Incorrect password. Please try again.</div>
+    <button id="password-submit">Unlock</button>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE CONTENT WRAPPER ═══════════ -->
+<div class="page-content-wrapper blurred" id="page-content">
 
 <!-- ═══════════ NAVIGATION ═══════════ -->
 <nav id="navbar">
@@ -3078,6 +3225,53 @@
       }
     });
   });
+</script>
+
+</div><!-- /page-content-wrapper -->
+
+<script>
+  (function() {
+    const overlay = document.getElementById('password-overlay');
+    const content = document.getElementById('page-content');
+    const input = document.getElementById('password-input');
+    const btn = document.getElementById('password-submit');
+    const errorMsg = document.getElementById('password-error');
+    const CORRECT = 'NHAIValueRecovery2026';
+
+    function unlock() {
+      if (input.value === CORRECT) {
+        overlay.classList.add('hidden');
+        content.classList.remove('blurred');
+      } else {
+        input.classList.add('error');
+        errorMsg.classList.add('visible');
+        input.value = '';
+        input.focus();
+        setTimeout(function() {
+          input.classList.remove('error');
+        }, 400);
+      }
+    }
+
+    btn.addEventListener('click', unlock);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') unlock();
+      errorMsg.classList.remove('visible');
+    });
+
+    // Prevent scrolling while locked
+    document.addEventListener('wheel', function(e) {
+      if (!overlay.classList.contains('hidden')) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', function(e) {
+      if (!overlay.classList.contains('hidden')) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('keydown', function(e) {
+      if (!overlay.classList.contains('hidden') && ['ArrowDown','ArrowUp','Space','PageDown','PageUp','Home','End'].includes(e.code)) {
+        e.preventDefault();
+      }
+    });
+  })();
 </script>
 
 </body>
