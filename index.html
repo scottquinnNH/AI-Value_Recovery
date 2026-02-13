@@ -330,13 +330,17 @@
 
   .mock-labels {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0 0.25rem;
   }
 
   .mock-label {
+    flex: 1;
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    text-align: center;
     opacity: 0.5;
   }
 
@@ -2421,9 +2425,154 @@
       text-align: center;
     }
   }
+
+  /* ── Password Protection ── */
+  #password-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(19, 46, 83, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+  }
+
+  #password-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .password-modal {
+    background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy) 100%);
+    border: 2px solid rgba(3, 159, 184, 0.3);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    text-align: center;
+  }
+
+  .password-modal h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .password-modal p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .password-input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .password-modal input[type="password"] {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid rgba(3, 159, 184, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+  }
+
+  .password-modal input[type="password"]:focus {
+    outline: none;
+    border-color: var(--cyan);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(3, 159, 184, 0.1);
+  }
+
+  .password-modal button {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .password-modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(3, 159, 184, 0.3);
+  }
+
+  .password-modal button:active {
+    transform: translateY(0);
+  }
+
+  .password-error {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .password-error.show {
+    display: block;
+  }
+
+  body.locked {
+    overflow: hidden;
+  }
+
+  body.locked > *:not(#password-overlay) {
+    filter: blur(10px);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+  }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- ═══════════ PASSWORD PROTECTION ═══════════ -->
+<div id="password-overlay">
+  <div class="password-modal">
+    <h2>Protected Content</h2>
+    <p>Please enter the password to access this page</p>
+    <div class="password-input-group">
+      <input
+        type="password"
+        id="password-input"
+        placeholder="Enter password"
+        autocomplete="off"
+      >
+      <div class="password-error" id="password-error">
+        Incorrect password. Please try again.
+      </div>
+    </div>
+    <button onclick="checkPassword()">Access Page</button>
+  </div>
+</div>
 
 <!-- ═══════════ NAVIGATION ═══════════ -->
 <nav id="navbar">
@@ -3154,6 +3303,46 @@
 
 <!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
+  // Password protection
+  const CORRECT_PASSWORD = 'NHAIValueRecovery2026';
+
+  function checkPassword() {
+    const input = document.getElementById('password-input');
+    const error = document.getElementById('password-error');
+    const overlay = document.getElementById('password-overlay');
+
+    if (input.value === CORRECT_PASSWORD) {
+      // Correct password - unlock page
+      document.body.classList.remove('locked');
+      overlay.classList.add('hidden');
+      error.classList.remove('show');
+      input.value = '';
+    } else {
+      // Incorrect password - show error
+      error.classList.add('show');
+      input.value = '';
+      input.focus();
+
+      // Shake animation
+      const modal = overlay.querySelector('.password-modal');
+      modal.style.animation = 'shake 0.5s';
+      setTimeout(() => {
+        modal.style.animation = '';
+      }, 500);
+    }
+  }
+
+  // Allow Enter key to submit password
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('password-input');
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+    input.focus();
+  });
+
   // Nav scroll effect
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
